@@ -5,13 +5,12 @@ The models produce some coordinates which is used to move the mouse pointer and 
 
 
 ## Project Set Up and Installation
-*TODO:* Explain the setup procedures to run your project. For instance, this can include your project directory structure, the models you need to download and where to place them etc. Also include details about how to install the dependencies your project requires.
 
-First step will be to install OpenVINO
+To set up this project, the first step will be to install OpenVINO
 
 Then clone or download this repo.
 
-Run the command pip3 install requirements.txt to install the required packages. 
+After downloading the repo, run the command **pip3 install requirements.txt** to install the required packages. 
 
 Download the following models using the OpenVINO model downloader:
 ```
@@ -62,10 +61,13 @@ The optional command line arguments are:
 ```
 
 ## Directory
+This is the structure of the project.
+
 ![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/tree.png)
 
 ## Benchmarks
-*TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. Your benchmarks can include: model loading time, input/output processing time, model inference time etc.
+The images below show the performance of the different models with the different precision types.
+
 ![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/inference_time.png)
 ![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/frames_per_second.png)
 ![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/model_load_time.png)
@@ -76,13 +78,6 @@ The face detection model across all the precision model types has the most laten
 Also, as the precision increases, the frames processed per second inccreases and we see that as the precision increases there is an increase in the computational resources required.
 
 Looking at the three precisions, we see that FP32 has the highest accuracy. This is evident in the gaze estimation output. The gaze estimation model is the last to be utilised in the project and as such the precision losses are accumulated right from the first model to the last model (the gaze estimation model).
-
-
-## Stand Out Suggestions
-This is where you can provide information about the stand out suggestions that you have attempted.
-
-### Async Inference
-If you have used Async Inference in your code, benchmark the results and explain its effects on power and performance of your project.
 
 ### Edge Cases
 
