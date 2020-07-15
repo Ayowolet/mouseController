@@ -35,38 +35,40 @@ python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py
 ## Demo
 To run a demo of this model, first launch the terminal. Once that has been launched, go to the src folder in the cloned directory and then use the command below to run it.
 
-python3 main.py -i ../bin/demo.mp4 \
--mfd <this is the path to face detection model xml file> \
--mld <this is the path to landmark detection model xml file> \
--mhp <this is the path to head-pose estimation model xml file> \
--mgd <this is the path to gaze estimation model xml file>
+```
+python3 main.py -i ../bin/demo.mp4 
+-mfd <this is the path to the xml file of the face detection model> 
+-mld <this is the path to the xml file of the landmark detection model > 
+-mhp <this is the path to the xml file of the head-pose estimation model> 
+-mgd <this is the path to the xml file of the gaze estimation model>
+```
 
 ## Documentation
-*TODO:* Include any documentation that users might need to better understand your project code. For instance, this is a good place to explain the command line arguments that your project supports.
 The required command line arguments are:
 
+```
 -inp, this is the path to the input which is the webcam or a video
-
 -mfd, this is the path to the face detection model
-
 -mld, this is the path to the landmark detection model
-
 -mhp, this is the path to the head-pose estimation model
-
 -mgd, this is the path to the gaze estimation model
 
 The optional command line arguments are:
 
--lay, this is the path for MKLDNN (CPU)-targeted custom layers
-
+-lay, this is the path for targeted custom layers (MKLDNN)
 -dev, target device type could be CPU, FPGA
-
 -perf, this is the path that stores the statistics of performance i.e. inference time, frames per second, and model loading time.
+-vf, specify flags from mfd, mld, mhp, mgd e.g. -vf mfd mld mhp mgd so the output of the models can be visualised. Ensure that each flag is separated by a space.
+```
 
--vf, specify flags from mfd, mld, mhp, mgd e.g. -vf mfd mld mhp mgd (seperate each flag by space) so the output of the models can be visualised
+## Directory
+![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/tree.png)
 
 ## Benchmarks
 *TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. Your benchmarks can include: model loading time, input/output processing time, model inference time etc.
+![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/inference%20time.png)
+![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/frames%20per%20second.png)
+![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/model%20load%20time.png)
 
 ## Results
 
