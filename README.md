@@ -66,9 +66,9 @@ The optional command line arguments are:
 
 ## Benchmarks
 *TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. Your benchmarks can include: model loading time, input/output processing time, model inference time etc.
-![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/inference%20time.png)
-![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/frames%20per%20second.png)
-![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/model%20load%20time.png)
+![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/inference_time.png)
+![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/frames_per_second.png)
+![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/model_load_time.png)
 
 ## Results
 
