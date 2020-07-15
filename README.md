@@ -14,7 +14,7 @@ Then clone or download this repo.
 Run the command pip3 install requirements.txt to install the required packages. 
 
 Download the following models using the OpenVINO model downloader:
-
+```
 a. Face detection model
 
 python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py --name "face-detection-adas-binary-0001"
@@ -30,7 +30,7 @@ python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py
 d. Gaze estimation model
 
 python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py --name "gaze-estimation-adas-0002"
-
+```
 
 ## Demo
 To run a demo of this model, first launch the terminal. Once that has been launched, go to the src folder in the cloned directory and then use the command below to run it.
