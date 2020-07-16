@@ -74,7 +74,7 @@ The images below show the performance of the different models with the different
 ![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/frames_per_second.png)
 ![Alt text](https://github.com/ayowolet/mouseController/blob/master/bin/model_load_time.png)
 
-## Results
+## Analysis of the above Benchmark Images
 
 The face detection model across all the precision model types has the most latency. This means that the inference speed of the four models combined is highly dependent on the inference speed of the face detection model.
 Also, as the precision increases, the frames processed per second inccreases and we see that as the precision increases there is an increase in the computational resources required.
