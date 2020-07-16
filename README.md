@@ -14,19 +14,19 @@ After downloading the repo, run the command **pip3 install requirements.txt** to
 
 Download the following models using the OpenVINO model downloader:
 ```
-a. Face detection model
+* Face detection model
 
 python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py --name "face-detection-adas-binary-0001"
 
-b. Landmark regression model
+* Landmark regression model
 
 python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py --name "landmarks-regression-retail-0009"
 
-c. Head-pose estimation model
+* Head-pose estimation model
 
 python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py --name "head-pose-estimation-adas-0001"
 
-d. Gaze estimation model
+* Gaze estimation model
 
 python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py --name "gaze-estimation-adas-0002"
 ```
@@ -35,28 +35,25 @@ python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py
 To run a demo of this model, first launch the terminal. Once that has been launched, go to the src folder in the cloned directory and then use the command below to run it.
 
 ```
-python3 main.py -i ../bin/demo.mp4 
--mfd <this is the path to the xml file of the face detection model> 
--mld <this is the path to the xml file of the landmark detection model > 
--mhp <this is the path to the xml file of the head-pose estimation model> 
--mgd <this is the path to the xml file of the gaze estimation model>
+python3 main.py -inp ../bin/demo.mp4 
 ```
 
 ## Documentation
-The required command line arguments are:
+The only required command line argument is:
 
 ```
 -inp, this is the path to the input which is the webcam or a video
--mfd, this is the path to the face detection model
--mld, this is the path to the landmark detection model
--mhp, this is the path to the head-pose estimation model
--mgd, this is the path to the gaze estimation model
-
+```
+The user can use other commands to modify the default settings of the program.
 The optional command line arguments are:
-
--lay, this is the path for targeted custom layers (MKLDNN)
+```
+-mfd, this sets the path to the face detection model
+-mld, this sets the path to the landmark detection model
+-mhp, this sets the path to the head-pose estimation model
+-mgd, this sets the path to the gaze estimation model
+-lay, this sets the path for targeted custom layers (MKLDNN)
 -dev, target device type could be CPU, FPGA
--perf, this is the path that stores the statistics of performance i.e. inference time, frames per second, and model loading time.
+-perf, this sets the path that stores the statistics of performance i.e. inference time, frames per second, and model loading time.
 -vf, specify flags from mfd, mld, mhp, mgd e.g. -vf mfd mld mhp mgd so the output of the models can be visualised. Ensure that each flag is separated by a space.
 ```
 
