@@ -34,15 +34,20 @@ python /opt/intel/openvino/deployment_tools/tools/model_downloader/downloader.py
 ## Demo
 To run a demo of this model, first launch the terminal. Once that has been launched, go to the src folder in the cloned directory and then use the command below to run it.
 
+To run the code using a demo video, use the command below
 ```
 python3 main.py -inp ../bin/demo.mp4 
+```
+To run the code using a webcam, use the command below
+```
+python3 main.py -inp cam
 ```
 
 ## Documentation
 The only required command line argument is:
 
 ```
--inp, this is the path to the input which is the webcam or a video
+-inp, this is where the user indicates the path to the input if it is a video or indicates if it is a webcam
 ```
 The user can use other commands to modify the default settings of the program.
 The optional command line arguments are:
