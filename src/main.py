@@ -14,6 +14,7 @@ from face_detection import Face_Detection
 import time
 import os
 import sys
+#from re import search
 
 logging.basicConfig(filename='mouse_controller.log', level=logging.DEBUG)
 
@@ -27,22 +28,18 @@ def get_args():
     Gets the arguments from the command line.
     '''
     parser = argparse.ArgumentParser()
-    # Argument groups are added
-    reqd = parser.add_argument_group('required arguments')
-    option = parser.add_argument_group('optional arguments')
 
     # -- create the arguments
+    parser.add_argument("-mfd", default = '../models/fp32/face-detection-adas-binary-0001', help = "This contains the path to face detection model", required = False)
+    parser.add_argument("-mld", default = '../models/fp32/landmarks-regression-retail-0009', help = "This contains the path to facial landmarks detection model", required = False)
+    parser.add_argument("-mhp", default = '../models/fp32/head-pose-estimation-adas-0001', help = "This contains the path to head pose estimation detection model", required = False)
+    parser.add_argument("-mgd", default = '../models/fp32/gaze-estimation-adas-0002', help = "This contains the path to gaze detection model", required = False)
     
-    option.add_argument("-mfd", default='../models/fp32/face-detection-adas-binary-0001', help="This contains the path to face detection model", required = False)
-    option.add_argument("-mld", default='../models/fp32/landmarks-regression-retail-0009', help="This contains the path to facial landmarks detection model", required = False)
-    option.add_argument("-mhp", default='../models/fp32/head-pose-estimation-adas-0001', help="This contains the path to head pose estimation detection model", required = False)
-    option.add_argument("-mgd", default='../models/fp32/gaze-estimation-adas-0002', help="This contains the path to gaze detection model", required = False)
-    
-    option.add_argument("-lay", default = CPU_EXTENSION, help="MKLDNN (CPU)-targeted custom layers.", required=False)
-    option.add_argument("-dev", default='CPU', help="Specify the target device type")
-    reqd.add_argument("-inp", help="path to video/image file or 'cam' for webcam", required = True)
-    option.add_argument("-perf", help="path to store performance stats", required = False)
-    option.add_argument("-vf", nargs='+', help="specify flags from mfd, mld, mhp, mgd e.g. -vf mfd mld mhp mgd so the output of the models can be visualised. Ensure that each flag is separated by a space.", default=[], required=False)
+    parser.add_argument("-lay", default = CPU_EXTENSION, help="MKLDNN (CPU)-targeted custom layers.", required = False)
+    parser.add_argument("-dev", default ='CPU', help = "Specify the target device type", required = False)
+    parser.add_argument("-inp", help = "path to video/image file or 'cam' for webcam", required = True)
+    parser.add_argument("-perf", help ="path to store performance stats", required = False)
+    parser.add_argument("-vf", nargs = '+', help = "specify flags from mfd, mld, mhp, mgd e.g. -vf mfd mld mhp mgd so the output of the models can be visualised. Ensure that each flag is separated by a space.", default = [], required = False)
     args = parser.parse_args()
 
     return args
@@ -87,25 +84,25 @@ def model_pipelines(args):
     headpose_model_load_start_time = time.time()
     gaze_model_load_start_time = time.time()
     
-    pipeline_faceDetection = Face_Detection(faceDetectionModel, device, customLayers)
-    pipeline_landmarksDetection = Facial_Landmarks_Detection(landmarksDetectionModel, device, customLayers)
-    pipeline_headPoseEstimation = Head_Pose_Estimation(headPoseEstimationModel, device, customLayers)
-    pipeline_gazeDetection = Gaze_Estimation(gazeDetectionModel, device, customLayers)
+    ppl_fd = Face_Detection(faceDetectionModel, device, customLayers)
+    ppl_fl = Facial_Landmarks_Detection(landmarksDetectionModel, device, customLayers)
+    ppl_hd = Head_Pose_Estimation(headPoseEstimationModel, device, customLayers)
+    ppl_ge = Gaze_Estimation(gazeDetectionModel, device, customLayers)
     
-    pipeline_faceDetection.load_model()
-    pipeline_landmarksDetection.load_model()
-    pipeline_headPoseEstimation.load_model()
-    pipeline_gazeDetection.load_model()
+    ppl_fd.load_model()
+    ppl_fl.load_model()
+    ppl_hd.load_model()
+    ppl_ge.load_model()
     
     face_model_load_time = time.time() - face_model_load_start_time
     landmark_model_load_time = time.time() - landmark_model_load_start_time
     headpose_model_load_time = time.time() - headpose_model_load_start_time
     gaze_model_load_time = time.time() - gaze_model_load_start_time
     
-    pipeline_faceDetection.check_model()
-    pipeline_landmarksDetection.check_model()
-    pipeline_headPoseEstimation.check_model()
-    pipeline_gazeDetection.check_model()
+    ppl_fd.check_model()
+    ppl_fl.check_model()
+    ppl_hd.check_model()
+    ppl_ge.check_model()
     
     log.info('Face Detection object initialized')
     log.info('Facial Landmarks object initialized')
@@ -115,8 +112,7 @@ def model_pipelines(args):
     log.info('All models loaded and checked')
     
     load_time = [face_model_load_time, landmark_model_load_time, headpose_model_load_time, gaze_model_load_time]
-    
-    
+      
     # count the number of frames
     frameCount = 0
 
@@ -132,25 +128,14 @@ def model_pipelines(args):
 
         key = cv2.waitKey(100)
         
+        # Get the time for the model inference
         face_inference_start_time = time.time()
-        face_crop = pipeline_faceDetection.predict(frame)
+        face_crop = ppl_fd.predict(frame)
         face_inference_time = time.time() - face_inference_start_time
         
-        landmark_inference_start_time = time.time()
-        eye_image_left, eye_image_right, face_landmarked = pipeline_landmarksDetection.predict(face_crop.copy())
-        landmark_inference_time = time.time() - landmark_inference_start_time
-        
-        headpose_inference_start_time = time.time()
-        head_pose_angles, head_pose_image = pipeline_headPoseEstimation.predict(face_crop.copy())   
-        headpose_inference_time = time.time() - headpose_inference_start_time
-        
-        gaze_inference_start_time = time.time()
-        coord_x, coord_y = pipeline_gazeDetection.predict(eye_image_left ,eye_image_right, head_pose_angles)
-        gaze_inference_time = time.time() - gaze_inference_start_time
-
         if 'mfd' in visual_flag:
             cv2.imshow('The cropped face', face_crop)
-
+            
         if type(face_crop) == int:
             log.info("No face can be detected")
             
@@ -158,23 +143,43 @@ def model_pipelines(args):
                 break
             
             continue
+        
+        # Get the time for the model inference
+        landmark_inference_start_time = time.time()
+        eye_image_left, eye_image_right, face_landmarked = ppl_fl.predict(face_crop.copy())
+        landmark_inference_time = time.time() - landmark_inference_start_time
        
+        # Get face landmark results
+        if 'mld' in visual_flag:
+            cv2.imshow('Face output', face_landmarked)
+            
         if eye_image_left.any() == None or eye_image_right.any() == None:
             log.info("Landmarks could not be detected, check that the eyes are visible and the image is bright")
             continue
         
-        if 'mld' in visual_flag:
-            cv2.imshow('Face output', face_landmarked)
-                
+        # Get the time for the model inference
+        headpose_inference_start_time = time.time()
+        head_pose_angles, head_pose_image = ppl_hd.predict(face_crop.copy())   
+        headpose_inference_time = time.time() - headpose_inference_start_time
+        
+        # Get head pose results
         if 'mhp' in visual_flag:
             cv2.imshow('Head Pose Angles', head_pose_image)
         
+        # Get the time for the model inference
+        gaze_inference_start_time = time.time()
+        coord_x, coord_y = ppl_ge.predict(eye_image_left ,eye_image_right, head_pose_angles)
+        gaze_inference_time = time.time() - gaze_inference_start_time
+
+        # Get gaze detection results
         if 'mgd' in visual_flag:
             cv2.putText(face_landmarked, "Estimated x:{:.2f} | Estimated y:{:.2f}".format(coord_x, coord_y), (10,20), cv2.FONT_HERSHEY_COMPLEX, 0.25, (0,255,0),1)
             cv2.imshow('Gaze Estimation', face_landmarked)
 
+
         mCoord = MouseController('medium','fast')
-         
+        
+        # Move the mouse based on the coordinates received
         if frameCount % 5 == 0:
             mCoord.move(coord_x, coord_y)
 
